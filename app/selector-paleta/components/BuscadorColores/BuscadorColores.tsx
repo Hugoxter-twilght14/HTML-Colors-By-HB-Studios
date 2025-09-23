@@ -102,7 +102,7 @@ function generateFamily(seedHex: string, steps = 5): { hex: string; rgb: string 
   });
 }
 
-/*Barra de busqueda*/
+/*Barra de busqueda (RESPONSIVA)*/
 export default function BuscadorColor({
   familySteps = 5,
   dotSize = 44,
@@ -155,39 +155,46 @@ export default function BuscadorColor({
 
   return (
     <section className="w-full">
-      <div className="mb-3 flex flex-wrap items-center gap-2">
+      {/* Barra de control responsiva */}
+      <div className="mb-3 flex flex-col sm:flex-row sm:items-center gap-2">
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && doSearch()}
           placeholder="Escribe HEX (#FF5733) o RGB (rgb(255, 87, 51)). Puedes ingresar varios separados por coma o espacio."
-          className="flex-1 min-w-[280px] rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/60"
+          className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm sm:text-base text-white placeholder-white/60"
         />
-        <button
-          onClick={doSearch}
-          className="rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-sm text-white hover:bg-white/20"
-        >
-          Buscar
-        </button>
-        <button
-          onClick={() => { setQuery(""); setResults([]); }}
-          className="rounded-lg border border-white/10 bg-white/0 px-3 py-2 text-sm text-white/80 hover:bg-white/10"
-        >
-          Limpiar
-        </button>
+        <div className="flex gap-2 sm:ml-2">
+          <button
+            onClick={doSearch}
+            className="flex-1 sm:flex-none rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-sm sm:text-base text-white hover:bg-white/20"
+          >
+            Buscar
+          </button>
+          <button
+            onClick={() => { setQuery(""); setResults([]); }}
+            className="flex-1 sm:flex-none rounded-lg border border-white/10 bg-white/0 px-3 py-2 text-sm sm:text-base text-white/80 hover:bg-white/10"
+          >
+            Limpiar
+          </button>
+        </div>
       </div>
 
-      {/*Resultados de la busqueda*/}
-      <div className="rounded-2xl bg-neutral-900 p-5 ring-1 ring-white/10">
-        <div className="mb-3 text-sm text-white/70">
+      {/*Resultados de la búsqueda (RESPONSIVO)*/}
+      <div className="rounded-2xl bg-neutral-900 p-4 sm:p-5 ring-1 ring-white/10">
+        <div className="mb-3 text-sm sm:text-base text-white/70">
           {results.length > 0
             ? `Resultados: ${results.length}`
             : "Ingresa uno o más colores y presiona Buscar."}
         </div>
+
         {results.length > 0 && (
           <div
-            className="grid gap-3"
-            style={{ gridTemplateColumns: `repeat(auto-fill, minmax(${dotSize + 8}px, 1fr))` }}
+            className="grid gap-3 sm:gap-4"
+            style={{
+              // círculos fluidos 36–56px; se acomodan tantas columnas como quepan
+              gridTemplateColumns: `repeat(auto-fit, minmax(clamp(36px, 7vw, 56px), 1fr))`,
+            }}
           >
             {results.map((hex) => (
               <button
@@ -195,8 +202,13 @@ export default function BuscadorColor({
                 title={hex}
                 aria-label={hex}
                 onClick={() => setOpenFor(hex)}
-                className="rounded-full ring-1 ring-white/10 hover:ring-white/40 transition"
-                style={{ backgroundColor: hex, aspectRatio: "1 / 1", width: dotSize }}
+                className="mx-auto w-full rounded-full ring-1 ring-white/10 hover:ring-white/40 transition"
+                style={{
+                  backgroundColor: hex,
+                  aspectRatio: "1 / 1",
+                  minWidth: Math.min(36, dotSize) + "px",
+                  maxWidth: `clamp(${Math.min(36, dotSize)}px, 7vw, ${Math.max(56, dotSize)}px)`,
+                }}
               />
             ))}
           </div>
@@ -212,7 +224,7 @@ export default function BuscadorColor({
   );
 }
 
-/*Cuadro de diálogo y tarjeta de colores */
+/*Cuadro de diálogo y tarjeta de colores — RESPONSIVOS */
 function Dialog({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => {
@@ -226,7 +238,9 @@ function Dialog({ children, onClose }: { children: React.ReactNode; onClose: () 
   return (
     <dialog
       ref={ref}
-      className="backdrop:bg-black/60 p-0 rounded-2xl overflow-hidden"
+      className="backdrop:bg-black/60 p-0 rounded-2xl sm:rounded-2xl overflow-hidden
+                 w-[92vw] max-w-[380px] sm:w-auto sm:max-w-none
+                 max-h-[88vh]"
       onClick={(e) => {
         const dialog = e.currentTarget as HTMLDialogElement;
         const rect = dialog.getBoundingClientRect();
@@ -235,7 +249,7 @@ function Dialog({ children, onClose }: { children: React.ReactNode; onClose: () 
         if (outside) onClose();
       }}
     >
-      {children}
+      <div className="overflow-auto">{children}</div>
     </dialog>
   );
 }
@@ -257,19 +271,21 @@ function FamilyCard({
   };
 
   return (
-    <div className="w-[320px] sm:w-[380px] bg-neutral-950 text-white">
-      <div className="flex items-center justify-between px-4 py-3">
+    <div className="bg-neutral-950 text-white w-full">
+      <div className="flex items-center justify-between px-4 py-3 sm:px-5 sm:py-4">
         <div className="flex items-center gap-2">
           <span className="inline-block h-4 w-4 rounded-full ring-1 ring-white/20" style={{ background: seed }} />
-          <div className="text-sm">
+          <div className="text-sm sm:text-base">
             <div className="font-medium">Familia</div>
-            <div className="text-white/60">{seed} · {toRgbString(seed)}</div>
+            <div className="text-white/60 text-xs sm:text-sm">{seed} · {toRgbString(seed)}</div>
           </div>
         </div>
-        <button onClick={onClose} className="rounded-md px-2 py-1 text-sm text-white/80 hover:bg-white/10">✕</button>
+        <button onClick={onClose} className="rounded-md px-3 py-1.5 text-sm text-white/80 hover:bg-white/10">
+          ✕
+        </button>
       </div>
 
-      <div className="px-4 pb-4">
+      <div className="px-3 sm:px-4 pb-4 sm:pb-5">
         <div className="overflow-hidden rounded-xl ring-1 ring-white/10">
           {family.map(({ hex, rgb }, i) => {
             const textHex = bestTextColor(hex);
@@ -282,12 +298,12 @@ function FamilyCard({
               textHex === "#000000"
                 ? "bg-black/10 hover:bg-black/20 text-black"
                 : "bg-white/15 hover:bg-white/25 text-white";
-            const plate = textHex === "#000000" ? "bg-white/70" : "bg-black/35";
+            const plate = textHex === "#000000" ? "bg-white/75" : "bg-black/35";
 
             return (
-              <div key={hex + i} className="flex items-center justify-between px-3 py-4" style={{ background: hex }}>
+              <div key={hex + i} className="flex items-center justify-between px-3 py-3 sm:py-4" style={{ background: hex }}>
                 <div
-                  className={`font-mono text-sm ${textBase}`}
+                  className={`font-mono text-[12px] sm:text-sm ${textBase}`}
                   style={{ textShadow: textHex === "#000000" ? "none" : "0 1px 1px rgba(0,0,0,.35)" }}
                 >
                   <div className={needsBackplate ? `inline-block rounded px-1.5 py-0.5 ${plate}` : ""}>
@@ -298,11 +314,11 @@ function FamilyCard({
                   </div>
                 </div>
 
-                <div className="flex gap-2">
-                  <button onClick={() => doCopy(hex)} className={`rounded-lg px-2 py-1 text-xs ring-1 ring-black/5 ${btnBase}`}>
+                <div className="flex gap-1.5 sm:gap-2">
+                  <button onClick={() => doCopy(hex)} className={`rounded-lg px-2 py-1 text-xs sm:text-[13px] ring-1 ring-black/5 ${btnBase}`}>
                     Copiar HEX
                   </button>
-                  <button onClick={() => doCopy(rgb)} className={`rounded-lg px-2 py-1 text-xs ring-1 ring-black/5 ${btnBase}`}>
+                  <button onClick={() => doCopy(rgb)} className={`rounded-lg px-2 py-1 text-xs sm:text-[13px] ring-1 ring-black/5 ${btnBase}`}>
                     Copiar RGB
                   </button>
                 </div>
@@ -311,15 +327,14 @@ function FamilyCard({
           })}
         </div>
 
-        <p className="mt-3 text-xs text-white/60">
-          Cierra esta ventana presionando la tecla <code>ESC</code>.
+        <p className="mt-3 text-xs sm:text-[13px] text-white/60">
+          Cierra esta ventana presionando <code>ESC</code>.
         </p>
       </div>
 
       {/* toast */}
-      <div className={["pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center transition",
-        toast ? "opacity-100" : "opacity-0"].join(" ")}>
-        <div className="rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-neutral-900 shadow-lg ring-1 ring-black/10">
+      <div className={`pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center transition ${toast ? "opacity-100" : "opacity-0"}`}>
+        <div className="rounded-full bg-white/90 px-3 py-1 text-[12px] sm:text-xs font-medium text-neutral-900 shadow-lg ring-1 ring-black/10">
           Copiado: <span className="font-mono">{toast}</span>
         </div>
       </div>
