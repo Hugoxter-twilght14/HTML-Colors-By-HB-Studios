@@ -1,6 +1,4 @@
 "use client";
-
-import { Button } from "@/components/ui/button";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
 /* ---------- Conversión de color (HEX/HSV/RGB) ---------- */
@@ -58,9 +56,8 @@ const isValidHex = (hex: string) => /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(hex);
 /* ---------- Componente: gotero inline ---------- */
 export default function InLineEyedropper({
   value = "#FF0000",
-  onApply,
   onChange,          
-  className = "",
+  className = "text-2xl",
   title = "Selector de color",
 }: {
   value?: string;
@@ -204,15 +201,7 @@ export default function InLineEyedropper({
         <span className="h-11 w-14 rounded-lg ring-1 ring-black/20" style={{ background: hex }} />
       </div>
 
-      {/* Aplicar */}
-      <div className="mx-auto mt-4 w-full max-w-[360px]">
-        <Button
-          onClick={() => { applyHexInput(); onApply(hex); }}
-          className="h-11 w-full rounded-lg bg-emerald-600 text-base font-medium hover:bg-emerald-500"
-        >
-          Aplicar
-        </Button>
-      </div>
+    
 
       <p className="mt-3 text-center text-xs text-white/60">
         Arrastra en el cuadro, mueve el control de color o escribe un HEX.

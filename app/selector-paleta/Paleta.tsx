@@ -44,8 +44,8 @@ const seeds = [
   return (
     <main className="mx-auto max-w-6xl px-4 py-10 text-white">
       <h1 className="mb-2 text-center text-3xl font-semibold tracking-wide">COLORES HTML</h1>
-      <p className="mb-8 text-center text-sm text-white/70">
-        Busca tu color en código HEX o RGB; Haz clic en cualquier color para ver su familia.
+      <p className="mb-4 text-xl text-center sm:text-xl text-zinc-300">
+        Busca tu color en código HEX o RGB; Haz clic en cualquier color para ver sus variantes.
       </p>
 
       <div className="mb-8">

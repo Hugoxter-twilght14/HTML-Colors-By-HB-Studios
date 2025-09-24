@@ -156,7 +156,7 @@ export default function PaletaColores({
     <section className="w-full">
       <div className="mb-4 px-1 sm:px-0">
         <h2 className="text-xl sm:text-2xl font-semibold text-white">{title}</h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
+        <p className="text-sm text-zinc-300 dark:text-gray-400">
           Toca o haz clic en cualquier color para ver su familia (HEX y RGB).
         </p>
       </div>
@@ -200,6 +200,7 @@ export default function PaletaColores({
 /* Función para elcuadro de diálogo y responsividad*/
 function Dialog({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
+
   useEffect(() => {
     const d = ref.current!;
     if (!d.open) d.showModal();
@@ -211,9 +212,16 @@ function Dialog({ children, onClose }: { children: React.ReactNode; onClose: () 
   return (
     <dialog
       ref={ref}
-      className="backdrop:bg-black/60 p-0 rounded-2xl sm:rounded-2xl overflow-hidden
-                 w-[92vw] max-w-[380px] sm:w-auto sm:max-w-none
-                 max-h-[88vh]"
+      className="
+        m-auto                        
+        [&::backdrop]:bg-black/60      
+        p-0 rounded-2xl overflow-hidden
+        w-[92vw] max-w-[380px]
+        sm:max-w-[420px]
+        md:max-w-[520px]
+        lg:max-w-[560px]
+        max-h-[80vh]
+      "
       onClick={(e) => {
         const dialog = e.currentTarget as HTMLDialogElement;
         const rect = dialog.getBoundingClientRect();
@@ -222,10 +230,11 @@ function Dialog({ children, onClose }: { children: React.ReactNode; onClose: () 
         if (outside) onClose();
       }}
     >
-      <div className="overflow-auto">{children}</div>
+      <div className="max-h-[80vh] overflow-auto">{children}</div>
     </dialog>
   );
 }
+
 
 /*Tarjeta de familia con contraste y tipografías/paddings adaptables*/
 function FamilyCard({
@@ -250,7 +259,7 @@ function FamilyCard({
         <div className="flex items-center gap-2">
           <span className="inline-block h-4 w-4 rounded-full ring-1 ring-white/20" style={{ background: seed }} />
           <div className="text-sm sm:text-base">
-            <div className="font-medium">Familia</div>
+            <div className="font-medium">Variantes</div>
             <div className="text-white/60 text-xs sm:text-sm">{seed} · {toRgbString(seed)}</div>
           </div>
         </div>

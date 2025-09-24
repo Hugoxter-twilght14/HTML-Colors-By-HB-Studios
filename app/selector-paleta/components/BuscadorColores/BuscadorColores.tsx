@@ -186,7 +186,7 @@ export default function BuscadorColor({
         <div className="mb-3 text-sm sm:text-base text-white/70">
           {results.length > 0
             ? `Resultados: ${results.length}`
-            : "Ingresa uno o más colores y presiona Buscar."}
+            : "Aqui apareceran los resultados de tu busqueda, ingresa un color en código HEX o RGB y presiona buscar."}
         </div>
 
         {results.length > 0 && (
