@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
 /*Utilidades de color independientes*/
@@ -165,18 +166,18 @@ export default function BuscadorColor({
           className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm sm:text-base text-white placeholder-white/60"
         />
         <div className="flex gap-2 sm:ml-2">
-          <button
+          <Button
             onClick={doSearch}
             className="flex-1 sm:flex-none rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-sm sm:text-base text-white hover:bg-white/20"
           >
             Buscar
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => { setQuery(""); setResults([]); }}
             className="flex-1 sm:flex-none rounded-lg border border-white/10 bg-white/0 px-3 py-2 text-sm sm:text-base text-white/80 hover:bg-white/10"
           >
             Limpiar
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -197,7 +198,7 @@ export default function BuscadorColor({
             }}
           >
             {results.map((hex) => (
-              <button
+              <Button
                 key={hex}
                 title={hex}
                 aria-label={hex}
@@ -280,9 +281,9 @@ function FamilyCard({
             <div className="text-white/60 text-xs sm:text-sm">{seed} · {toRgbString(seed)}</div>
           </div>
         </div>
-        <button onClick={onClose} className="rounded-md px-3 py-1.5 text-sm text-white/80 hover:bg-white/10">
+        <Button onClick={onClose} className="rounded-md px-3 py-1.5 text-sm text-white/80 hover:bg-white/10">
           ✕
-        </button>
+        </Button>
       </div>
 
       <div className="px-3 sm:px-4 pb-4 sm:pb-5">
@@ -315,12 +316,12 @@ function FamilyCard({
                 </div>
 
                 <div className="flex gap-1.5 sm:gap-2">
-                  <button onClick={() => doCopy(hex)} className={`rounded-lg px-2 py-1 text-xs sm:text-[13px] ring-1 ring-black/5 ${btnBase}`}>
+                  <Button onClick={() => doCopy(hex)} className={`rounded-lg px-2 py-1 text-xs sm:text-[13px] ring-1 ring-black/5 ${btnBase}`}>
                     Copiar HEX
-                  </button>
-                  <button onClick={() => doCopy(rgb)} className={`rounded-lg px-2 py-1 text-xs sm:text-[13px] ring-1 ring-black/5 ${btnBase}`}>
+                  </Button>
+                  <Button onClick={() => doCopy(rgb)} className={`rounded-lg px-2 py-1 text-xs sm:text-[13px] ring-1 ring-black/5 ${btnBase}`}>
                     Copiar RGB
-                  </button>
+                  </Button>
                 </div>
               </div>
             );

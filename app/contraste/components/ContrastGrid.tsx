@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import { Button } from "@/components/ui/button";
+import React, { useState } from "react";
 
 /* ===== Utils mínimos ===== */
 type RGB = { r:number; g:number; b:number };
@@ -25,20 +26,11 @@ const badgeByRatio = (r:number) =>
 : r>=4.5 ? "bg-amber-500/20 text-amber-300 ring-1 ring-amber-400/30"
          : "bg-rose-500/20 text-rose-300 ring-1 ring-rose-400/30";
 
-/* ===== Tipado y datos ===== */
-export type ContrastItem = {
-  /** Texto (ej. “Az”) grande dentro de la tarjeta */
-  label: string;
-  /** Color del texto (HEX) */
-  fg: string;
-  /** Color de fondo (HEX) */
-  bg: string;
-};
+const copy = (t:string) => navigator.clipboard.writeText(t).catch(()=>{});
 
-/**
- * EDITA ESTE ARRAY para agregar o quitar tarjetas.
- * Solo agrega objetos { label, fg, bg } como los siguientes.
- */
+/* ===== Tipado y datos ===== */
+export type ContrastItem = { label: string; fg: string; bg: string };
+
 export const CONTRAST_SETS: ContrastItem[] = [
   { label: "Az", fg: "#0AEF48", bg: "#0531CB" },
   { label: "Az", fg: "#964D1E", bg: "#0AFE57" },
@@ -58,17 +50,40 @@ export default function ContrastGrid({
   items?: ContrastItem[];
   title?: string;
 }) {
-  return (
-    <section className="w-full">
-      <h2 className="mb-4 text-xl sm:text-2xl font-semibold">{title}</h2>
+  const [toast, setToast] = useState<string | null>(null);
 
-      {/* Grid responsivo tipo “tarjetas grandes” */}
+  const makeCss = (it: ContrastItem) => {
+    const r = ratio(it.fg, it.bg).toFixed(2);
+    return [
+      `/* ${it.label} — ratio ${r}:1 */`,
+      `color: ${it.fg};`,
+      `background-color: ${it.bg};`,
+      "",
+      "/* Alternativa con variables */",
+      `--c-text: ${it.fg};`,
+      `--c-bg: ${it.bg};`,
+      "color: var(--c-text);",
+      "background-color: var(--c-bg);",
+    ].join("\n");
+  };
+
+  const doCopy = async (it: ContrastItem) => {
+    await copy(makeCss(it));
+    setToast(`Copiado ${it.fg} / ${it.bg}`);
+    setTimeout(() => setToast(null), 1100);
+  };
+
+  return (
+    <section className="w-full relative">
+      <h2 className="mb-4 text-xl sm:text-2xl font-semibold text-white">{title}</h2>
+      <p className="mb-4 text-xl sm:text-xl text-zinc-300">Colores de contraste, compara que colores combinan y obten la mejor idea para usar en tu web o diseños</p>
+
       <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
         {items.map((it, idx) => {
           const r = ratio(it.fg, it.bg);
           return (
             <article key={`${it.fg}-${it.bg}-${idx}`} className="overflow-hidden rounded-[22px] ring-1 ring-white/10">
-              {/* Tile grande con texto y ratio (como en tu captura) */}
+              {/* Tile */}
               <div className="relative m-[6px] h-[260px] rounded-[22px] sm:h-[300px]" style={{ background: it.bg }}>
                 <div className="relative z-10 flex h-full flex-col items-center justify-center">
                   <div className="text-[64px] sm:text-[72px] font-extrabold tracking-tight" style={{ color: it.fg }}>
@@ -81,22 +96,42 @@ export default function ContrastGrid({
                 </div>
               </div>
 
-              {/* Swatches y códigos HEX debajo */}
+              {/* Footer: swatches, códigos y botón copiar */}
               <div className="px-4 pb-4 pt-2">
-                <div className="mb-2 flex items-center gap-6">
-                  <div className="flex items-center gap-2">
-                    <span className="h-6 w-6 rounded-full ring-1 ring-white/20" style={{ background: it.fg }} />
-                    <span className="font-mono text-xs sm:text-sm text-white/90">{it.fg}</span>
+                <div className="mb-2 flex items-center justify-between">
+                  <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-2">
+                      <span className="h-6 w-6 rounded-full ring-1 ring-white/20" style={{ background: it.fg }} />
+                      <span className="font-mono text-xs sm:text-sm text-white/90">{it.fg}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="h-6 w-6 rounded-full ring-1 ring-white/20" style={{ background: it.bg }} />
+                      <span className="font-mono text-xs sm:text-sm text-white/90">{it.bg}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="h-6 w-6 rounded-full ring-1 ring-white/20" style={{ background: it.bg }} />
-                    <span className="font-mono text-xs sm:text-sm text-white/90">{it.bg}</span>
-                  </div>
+
+                  <Button
+                    onClick={() => doCopy(it)}
+                    className="rounded-xl border border-white/10 bg-white/10 px-3 py-1.5 text-xs sm:text-sm text-white hover:bg-white/20"
+                    title="Copiar CSS para usar esta combinación"
+                  >
+                    Copiar
+                  </Button>
                 </div>
               </div>
             </article>
           );
         })}
+      </div>
+
+      {/* mini toast */}
+      <div className={[
+        "pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center transition",
+        toast ? "opacity-100" : "opacity-0"
+      ].join(" ")}>
+        <div className="rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-neutral-900 shadow-lg ring-1 ring-black/10">
+          {toast}
+        </div>
       </div>
     </section>
   );

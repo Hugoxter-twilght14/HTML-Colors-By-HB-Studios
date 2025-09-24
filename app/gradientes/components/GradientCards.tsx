@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import React, { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 
@@ -80,7 +81,8 @@ export default function GradientCards({
 
   return (
     <section className="w-full">
-      <h2 className="mb-4 text-xl sm:text-2xl font-semibold">{title}</h2>
+      <h2 className="mb-4 text-xl sm:text-2xl font-semibold text-white">{title}</h2>
+      <p className="mb-4 text-xl sm:text-xl text-zinc-300">Haz click sobre cada card para desplegar el código y ver más información</p>
 
       {/* Grid de tarjetas (SIN grados ni botón ⋯) */}
       <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
@@ -90,7 +92,7 @@ export default function GradientCards({
             className="relative overflow-hidden rounded-[22px] ring-1 ring-white/10 hover:ring-white/20 transition"
           >
             {/* Tarjeta clickeable */}
-            <button
+            <Button
               onClick={() => setOpenIndex(idx)}
               className="block h-[240px] w-full sm:h-[280px] rounded-[22px]"
               style={{ backgroundImage: cssFrom(g) }}
@@ -114,7 +116,7 @@ export default function GradientCards({
             {/* Códigos debajo */}
             <div className="flex flex-wrap items-center gap-2 bg-white/5 px-4 py-3 text-xs sm:text-sm font-mono">
               {g.stops.map((s, i) => (
-                <span key={i} className="rounded bg-black/20 px-2 py-0.5">{s}</span>
+                <span key={i} className="rounded text-white px-2 py-0.5">{s}</span>
               ))}
             </div>
           </article>
@@ -127,7 +129,7 @@ export default function GradientCards({
           <>
             <div className="flex items-center justify-between px-4 py-3">
               <div className="text-lg font-medium">Detalle del degradado</div>
-              <button onClick={() => setOpenIndex(null)} className="rounded px-2 py-1 hover:bg-white/10">✕</button>
+              <Button onClick={() => setOpenIndex(null)} className="rounded px-2 py-1 hover:bg-white/10">✕</Button>
             </div>
 
             {/* Preview */}
@@ -162,17 +164,17 @@ export default function GradientCards({
                     background-image: {css};
                   </code>
                   <div className="mt-2">
-                    <button
+                    <Button
                       onClick={() => copy(`background-image: ${css};`)}
                       className="rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-sm hover:bg-white/20"
                     >
                       Copiar CSS
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>
 
-              <p className="mt-3 text-xs text-white/60">Clic fuera (oscuro) o presiona ESC para cerrar.</p>
+              <p className="mt-3 text-xs text-white/60">Haz clic por fuera o presiona ESC para cerrar.</p>
             </div>
           </>
         )}

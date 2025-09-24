@@ -8,7 +8,7 @@ export default function GoteroPage() {
 
   return (
     <main className="space-y-4">
-      <div className="rounded-2xl bg-white/5 p-4 ring-1 ring-white/10">
+      <div className="rounded-2xl bg-white/5 p-4 ring-1 ring-white/10 text-white">
         <div className="mb-3 flex items-center gap-3">
           <span className="h-10 w-10 rounded ring-1 ring-white/10" style={{ background: color }} />
           <code className="font-mono">{color}</code>

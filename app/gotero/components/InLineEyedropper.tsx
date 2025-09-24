@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
 /* ---------- Conversión de color (HEX/HSV/RGB) ---------- */
@@ -205,12 +206,12 @@ export default function InLineEyedropper({
 
       {/* Aplicar */}
       <div className="mx-auto mt-4 w-full max-w-[360px]">
-        <button
+        <Button
           onClick={() => { applyHexInput(); onApply(hex); }}
           className="h-11 w-full rounded-lg bg-emerald-600 text-base font-medium hover:bg-emerald-500"
         >
           Aplicar
-        </button>
+        </Button>
       </div>
 
       <p className="mt-3 text-center text-xs text-white/60">
